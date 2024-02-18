@@ -24,6 +24,15 @@ export async function resetPasswordValidation(values){
     return errors;
 }
 
+//validate register form
+export async function registerValidation(values){
+    const error = usernameValidate({}, values);
+    passwordValidate(error, values)
+    emailverify(error, values)
+
+    return error;
+}
+
 //validate password
 function passwordVerify(errors = {}, values){
 
@@ -49,6 +58,19 @@ function usernameVerify(error = {}, values){
         error.username = toast.error("username required");
     }else if(values.username.includes("")){
         error.username = toast.error("Invalid username....!")
+    }
+
+    return error;
+}
+
+// validate email
+function emailverify(error = {}, values){
+    if(!values.email){
+        error.email = toast.error("Email required ..!")
+    }else if(values.email.includes(" ")){
+        error.email = toast.error("Wrong Email...!")
+    }else if(!/^[a-z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
+        error.email = toast.error("Invalid email address...!")
     }
 
     return error;
