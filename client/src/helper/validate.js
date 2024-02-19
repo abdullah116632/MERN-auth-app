@@ -13,6 +13,12 @@ export async function passwordValidate(values){
     return errors;
 }
 
+//validate profile page
+export async function profileValidation(values){
+    const errors = emailverify({}, values);
+    return errors;
+}
+
 //validate reset password
 export async function resetPasswordValidation(values){
     const errors = passwordValidate({}, values);
