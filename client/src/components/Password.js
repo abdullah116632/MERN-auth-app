@@ -27,10 +27,10 @@ export default function Password() {
         <Toaster position="top-center" reverseOrder={false}></Toaster>
 
         <div className="flex justify-center items-center h-screen">
-            <div className={styles.glass}>
+            <div className={styles.glass} style={{width: "30%"}}>
 
                 <div className="title flex flex-col items-center">
-                    <h4 className="text-5xl font-bold">hello Again!</h4>
+                    <h4 className="text-5xl font-bold">Hello Again!</h4>
                     <span className="py-4 text-xl w-2/3 text-center text-gray-500">
                         Explore more by connecting with us.
                     </span>
