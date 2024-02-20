@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
+import router from "./router/route";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.disable("x-powered-by");
 app.get("/", (req, res) => {
   res.status(201).json("home get");
 });
+
+app.use("/api", router);
 
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
