@@ -100,11 +100,42 @@ export async function login(req, res) {
 }
 
 export async function getUser(req, res) {
-  res.json("get user");
+  const {username} = req.params;
+
+  console.log(username);
+
+  try{
+
+    if(!username) return res.status(501).send({error: "Invalid username"})
+
+    const user =  await UserModel.findOne({username})
+
+    if(!user) return res.status(501).send({error: "cannot find the user"});
+
+    const { password, ...rest } = Object.assign({}, user.toJSON());
+    
+      return res.status(201).send(rest);
+   
+
+  }catch(error){
+    return res.status(404).send({error: "cannot find user data"})
+  }
 }
 
 export async function updateUser(req, res) {
-  res.json("update user");
+  try{
+    const id = req.query.id;
+
+    if(id){
+      const body = req.body;
+
+      const updatedUser = await UserModel.updateOne({_id: id}, body);
+
+      return res.status(201).send({msg: "Record updated...!"});
+    }
+   }catch(error){
+    return res.status(401).json({error})
+  }
 }
 
 export async function generateOTP(req, res) {
