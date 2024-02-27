@@ -45,8 +45,9 @@ export async function resetPasswordValidation(values){
 
 //validate register form
 export async function registerValidation(values){
-    const error = usernameValidate({}, values);
-    passwordValidate(error, values)
+    console.log(values);
+    const error = usernameVerify({}, values);
+    passwordVerify(error, values)
     emailverify(error, values)
 
     return error;

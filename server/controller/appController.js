@@ -29,15 +29,20 @@ export async function register(req, res) {
   try {
     const { username, password, profile, email } = req.body;
 
+    
+
     if (!username || !password || !email) {
       throw Error("please fill up all the field");
     }
 
+    
     // Check if username already exists
     const existUsername = await UserModel.findOne({ username });
+    console.log(existUsername);
     if (existUsername) {
       return res.status(400).send({ error: "Please use a unique username" });
     }
+    
 
     // Check if email already exists
     const existEmail = await UserModel.findOne({ email });

@@ -26,13 +26,17 @@ export async function getUser({username}){
 
 //register user function
 export async function registerUser(credential){
+    
     try{
+        console.log(credential);
         const {data : {msg}, status} = await axios.post(`/api/register`, credential);
-
+        console.log("status is");
         let {username, email} = credential;
 
+        
+
         if(status === 201){
-            await axios.po("/api/registerMail", {username, userEmail: email, text : msg})
+            await axios.post("/api/registerMail", {username, userEmail: email, text : msg})
         }
 
         return Promise.resolve(msg)
