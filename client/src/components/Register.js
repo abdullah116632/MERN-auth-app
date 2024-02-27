@@ -16,7 +16,7 @@ export default function Register() {
         initialValues : {
           email: "demos@gmail.com",
           username: "example123",
-            password : ""
+          password : ""
         },
         validate: registerValidation,
         validateOnBlur: false,

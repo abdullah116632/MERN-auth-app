@@ -1,5 +1,7 @@
 import axios from "axios";
 
+
+
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN
 
 // authenticate function
@@ -101,7 +103,7 @@ export async function resetPassword({username, password}){
     try{
         const {data, status} = await axios.put('/api/resetPassword', {username, password});
         return Promise.resolve({data, status});
-    }catch(err){
+    }catch(error){
         return Promise.reject({error})
     }
 }

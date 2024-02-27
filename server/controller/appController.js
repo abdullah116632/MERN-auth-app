@@ -10,6 +10,8 @@ export async function verifyUser(req, res, next) {
   try {
     const { username } = req.method == "GET" ? req.query : req.body;
 
+    console.log(username);
+
     // check the user existence
     let exist = await UserModel.findOne({ username });
 
