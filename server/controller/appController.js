@@ -29,6 +29,8 @@ export async function register(req, res) {
   try {
     const { username, password, profile, email } = req.body;
 
+    console.log(req.body);
+
     
 
     if (!username || !password || !email) {

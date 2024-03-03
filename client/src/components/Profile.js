@@ -1,30 +1,43 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import avatar from "../assets/profile.png";
-import { Toaster } from "react-hot-toast";
+import toast,{ Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { profileValidation } from "../helper/validate";
 import converToBase64 from "../helper/convert";
+import useFetch from '../hooks/fetch.hook';
+import { updateUser } from "../helper/helper";
+
 
 import styles from "../styles/Username.module.css";
 import extand from "../styles/Profile.module.css";
 
 export default function Profile() {
   const [file, serFile] = useState();
+  const [{isLoading, apiData, serverError}] = useFetch()
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "demos@gmail.com",
-      mobile: "example123",
-      address: "",
+      firstName: apiData?.firstName || "",
+      lastName: apiData?.lastName || "",
+      email: apiData?.email || "",
+      mobile: apiData?.mobile || "",
+      address: apiData?.address  || "",
     },
+    enableReinitialize: true,
     validate: profileValidation,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, { profile: file || "" });
+      values = Object.assign(values, { profile: file || apiData?.profile || "" });
+      let updatePromise = updateUser(values);
+
+      toast.promise(updatePromise, {
+        loading: "updating...",
+        success: <b>Update Success</b>,
+        error: <b>Could not Update</b>
+      })
       console.log(values);
     },
   });
@@ -34,6 +47,16 @@ export default function Profile() {
     const base64 = await converToBase64(e.target.files[0]);
     serFile(base64);
   };
+
+  //logout handler function 
+  function userlogOut(){
+    localStorage.removeItem("token")
+    navigate("/")
+    
+  }
+
+  if(isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
+  if(serverError) return <h1 className='text-xl text-red-500'>{serverError.message}</h1>
 
   return (
     <div className="container mx-auto">
@@ -55,7 +78,7 @@ export default function Profile() {
             <div className="profile flex justify-center py-2">
               <label htmlFor="profile">
                 <img
-                  src={file || avatar}
+                  src={apiData?.profile || file || avatar}
                   className={`${styles.profile_img} ${extand.profile_img}`}
                   alt="avatar"
                 />
@@ -72,14 +95,14 @@ export default function Profile() {
             <div className="textbox flex flex-col items-center gap-3">
               <div className="name flex w-3/4 gap-4">
                 <input
-                  {...formik.getFieldProps("firsName")}
-                  type="email"
+                  {...formik.getFieldProps("firstName")}
+                  type="text"
                   className={`${styles.textbox} ${extand.textbox}`}
                   placeholder="First name*"
                 />
                 <input
                   {...formik.getFieldProps("lastName")}
-                  type="email"
+                  type="text"
                   className={`${styles.textbox} ${extand.textbox}`}
                   placeholder="Last name*"
                 />
@@ -87,7 +110,7 @@ export default function Profile() {
               <div className="name flex w-3/4 gap-4">
                 <input
                   {...formik.getFieldProps("mobile")}
-                  type="email"
+                  type="text"
                   className={`${styles.textbox} ${extand.textbox}`}
                   placeholder="Mobile No."
                 />
@@ -101,7 +124,7 @@ export default function Profile() {
 
               <input
                 {...formik.getFieldProps("address")}
-                type="email"
+                type="text"
                 className={`${styles.textbox} ${extand.textbox}`}
                 placeholder="Address"
               />
@@ -113,7 +136,7 @@ export default function Profile() {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 come back later?{" "}
-                <Link className="text-red-500" to="/">
+                <Link className="text-red-500" to="/" onClick={userlogOut}>
                   {" "}
                   logout
                 </Link>{" "}

@@ -1,8 +1,16 @@
 import axios from "axios";
-
-
+import {jwtDecode} from  "jwt-decode";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN
+
+// to get username from token
+export async function getUsername(){
+    const token = localStorage.getItem("token");
+    if(!token) return Promise.reject("cannot find token");
+
+    let decode = jwtDecode(token);
+    return decode;
+}
 
 // authenticate function
 export async function authenticate(username){
@@ -30,6 +38,7 @@ export async function registerUser(credential){
     try{
         console.log(credential);
         const {data : {msg}, status} = await axios.post(`/api/register`, credential);
+        console.log("test")
         console.log("status is");
         let {username, email} = credential;
 
@@ -63,7 +72,8 @@ export async function verifyPassword({username, password}){
 //update user function
 export async function updateUser(response){
     try{
-        const token = await localStorage.getItem("token");
+        console.log(response);
+        const token = localStorage.getItem("token");
         const data = await axios.put("/api/updateuser", response, {headers: {"Authorization": `Bearer ${token}`}});
 
         return Promise.resolve({data});

@@ -15,9 +15,9 @@ app.use(morgan("tiny"));
 app.disable("x-powered-by");
 
 
-app.get("/", (req, res) => {
-  res.status(201).json("home get");
-});
+// app.get("/", (req, res) => {
+//   res.status(201).json("home get");
+// });
 
 app.use("/api", authRouter);
 
