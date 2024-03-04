@@ -182,8 +182,7 @@ export async function verifyOTP(req, res) {
 
 export async function createResetSession(req, res) {
   if (req.app.locals.resetSession) {
-    req.app.locals.resetSession = false;
-    return res.status(201).send({ msg: "access granted" });
+    return res.status(201).send({ flag: req.app.locals.resetSession });
   }
 
   return res.status(440).send({ error: "session expired" });

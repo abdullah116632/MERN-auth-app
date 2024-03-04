@@ -21,6 +21,7 @@ export async function usernameValidate(values){
 }
 
 export async function passwordValidate(values){
+    console.log(values);
     const errors = passwordVerify({}, values);
 
     return errors;
@@ -34,7 +35,7 @@ export async function profileValidation(values){
 
 //validate reset password
 export async function resetPasswordValidation(values){
-    const errors = passwordValidate({}, values);
+    const errors = passwordVerify({}, values);
 
     if(values.password !== values.confirm_pwd){
         errors.exist = toast.error("Password not match ..!");
@@ -56,12 +57,14 @@ export async function registerValidation(values){
 //validate password
 function passwordVerify(errors = {}, values){
 
+    console.log(values);
+
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
     if(!values.password){
         errors.password = toast.error("Password Required");
     }else if(values.password.includes(" ")){
-        errors.password = toast.error("Wrong Password ...!");
+        errors.password = toast.error("No space allowed ...!");
     }else if(values.password.length < 4){
         errors.password = toast.error("Password must be more then 4 character long .")
     }else if(!specialChars.test(values.password)){
