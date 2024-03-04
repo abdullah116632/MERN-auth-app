@@ -10,8 +10,6 @@ export async function verifyUser(req, res, next) {
   try {
     const { username } = req.method == "GET" ? req.query : req.body;
 
-    console.log(username);
-
     // check the user existence
     let exist = await UserModel.findOne({ username });
 
@@ -166,7 +164,14 @@ export async function generateOTP(req, res) {
 
 export async function verifyOTP(req, res) { 
   const { code } = req.query;
+
+  console.log(req.query);
+
+  console.log(code);
+  console.log(req.app.locals.OTP);
+  
   if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+    console.log("test");
     req.app.locals.OTP = null;
     req.app.locals.resetSession = true;
     return res.status(201).send({ msg: "verify successfully" });
